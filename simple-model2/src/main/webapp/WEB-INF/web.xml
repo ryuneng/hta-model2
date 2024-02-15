@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="https://jakarta.ee/xml/ns/jakartaee" xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_5_0.xsd" id="WebApp_ID" version="5.0">
+	<!-- 20240215
+		FrontControllerServlet 배포하기
+			1. 요청 URL의 패턴을 지정한다.
+				main.do, login.do, logout.do, list.do 형식의
+				요청 URL을 접수받으면 FrontControllerServlet이 실행된다.
+			2. 컨트롤러 클래스가 정의된 패키지를 지정한다.
+			 	<init-param>
+			 		<param-name>base-package</param-name>
+			 		<param-value>controllers</param-value> // controllers : 패키지 경로
+			 	</init-param>
+			3. jsp파일을 숨긴 폴더를 지정한다.
+			 	<init-param>
+			 		<param-name>jsp-directory</param-name>
+			 		<param-value>폴더경로</param-value>
+			 	</init-param>
+			4. 웹서버 시작 시 서블릿 객체가 생성되고 초기화 작업이 완료되게 하기
+				<load-on-startup>숫자(작은 숫자의 우선순위가 높음)</load-on-startup>
+	 -->
+	 <servlet>
+	 	<servlet-name>frontcontrollerServlet</servlet-name>
+	 	<servlet-class>kr.co.jhta.model2.FrontControllerServlet</servlet-class>
+	 	<init-param> <!-- 서블릿 초기화 파라미터 -->
+	 		<param-name>base-package</param-name>
+	 		<param-value>controllers</param-value>
+	 	</init-param>
+	 	<init-param>
+	 		<param-name>jsp-directory</param-name>
+	 		<param-value>/WEB-INF/views/</param-value>
+	 	</init-param>
+	 	<load-on-startup>1</load-on-startup>
+	 </servlet>
+	 <servlet-mapping>
+	 	<servlet-name>frontcontrollerServlet</servlet-name>
+	 	<url-pattern>*.do</url-pattern> <!-- do : 내맘대로 정하면 됨, 내부응답? URL 뒤에 붙을 값 -->
+	 </servlet-mapping>
+</web-app>
