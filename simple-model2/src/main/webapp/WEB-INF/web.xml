@@ -35,4 +35,15 @@
 	 	<servlet-name>frontcontrollerServlet</servlet-name>
 	 	<url-pattern>*.do</url-pattern> <!-- do : 내맘대로 정하면 됨, 내부응답? URL 뒤에 붙을 값 -->
 	 </servlet-mapping>
+	 
+	 <!-- 20240216
+	 	모든 jsp 파일 앞부분에 <include-prelude> 태그 내에 적은 jsp 파일이 포함되도록 해줌
+	 -->
+	 <jsp-config>
+	 	<jsp-property-group>
+	 		<url-pattern>*.jsp</url-pattern>
+	 		<include-prelude>/WEB-INF/views/common/tag.jsp</include-prelude>
+	 	</jsp-property-group>
+	 </jsp-config>
 </web-app>
+

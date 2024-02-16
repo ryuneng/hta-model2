@@ -2,6 +2,7 @@ package controllers; // 20240215
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import kr.co.jhta.model2.annotation.Controller;
 import kr.co.jhta.model2.annotation.RequestMapping;
 import kr.co.jhta.model2.constant.HttpMethod;
@@ -18,6 +19,40 @@ public class HomeController {
 	@RequestMapping(path = "/home.do")
 	public String home(HttpServletRequest req, HttpServletResponse resp) throws Exception {
 		return "home.jsp";
+	}
+	
+	// 홈에서 로그인 버튼 눌렀을 때
+	@RequestMapping(path = "/login.do")
+	public String loginform(HttpServletRequest req, HttpServletResponse resp) throws Exception {
+		return "loginform.jsp";
+	}
+	
+	// loginform에서 로그인 눌렀을 때
+	@RequestMapping(path = "/login.do", method = HttpMethod.POST)
+	public String login(HttpServletRequest req, HttpServletResponse resp) throws Exception {
+		String id = req.getParameter("id");
+		String password = req.getParameter("password");
+		
+		try {
+			User user = userService.login(id, password); // Service에게 로그인 체크를 수행해달라고 요청
+			HttpSession session = req.getSession();
+			session.setAttribute("LOGIN_USER", user);
+			
+			return "redirect:home.do";
+		} catch (Exception ex) {
+			return "redirect:login.do?error=fail";
+		}
+		
+	}
+	
+	@RequestMapping(path = "/logout.do")
+	public String logout(HttpServletRequest req, HttpServletResponse resp) throws Exception {
+		HttpSession session = req.getSession(false);
+		if (session != null) {
+			session.invalidate(); // 세션을 무효화시키는 메소드
+		}
+		
+		return "redirect:home.do";
 	}
 	
 	// home.jsp의 회원가입 링크 눌렀을 때
