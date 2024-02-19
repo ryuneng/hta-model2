@@ -22,12 +22,20 @@
 			
 			<%-- ${boardList } --%>
 			<!-- 해당 jsp에서 boardList를 사용할 수 있는 원리 : BoardController에 boardList라는 이름으로 담겨있음 -->
-			<!--
+			<%--
+				<c:out value="${param.page }" default="1"></c:out>
 				param.page : (tomcat 안의 jsp 안에서 표현되는)요청파라미터에서 page라는 속성명의 값을 가져옴
 				* 요청파라미터값이 비어있을 때는 default=""로 기본값 지정 가능
-			-->
-			<p>현재 페이지 : <c:out value="${param.page }" default="1"></c:out></p>
+			--%>
+			<p>현재 페이지 : ${paging.currentPage } / ${paging.totalPages }</p>
 			<table class="table">
+				<colgroup>
+					<col width="10%">
+					<col width="*">
+					<col width="10%">
+					<col width="15%">
+					<col width="15%">
+				</colgroup>
 				<thead>
 					<tr>
 						<th>번호</th>
@@ -45,13 +53,17 @@
 							</tr>
 						</c:when>
 						<c:otherwise>
+							<!--
+								forEach : 반복할 때 사용하는 태그, 최상단에 taglib 있어서 사용 가능
+								1. var items 용법
+							-->
 							<c:forEach var="board" items="${boardList }">
 								<tr>
 									<td>${board.no }</td>
-									<td>${board.title }</td>
+									<td><a href="detail.do?no=${board.no }">${board.title }</a></td>
 									<td>${board.readCount }</td>
 									<td>${board.user.name }</td>
-									<td><ftn:formatDate value="${board.createdDate }"/></td>
+									<td><fmt:formatDate value="${board.createdDate }"/></td>
 								</tr>
 							</c:forEach>
 						</c:otherwise>
@@ -65,17 +77,43 @@
 		<div class="col-12">
 			<nav>
 				<ul class="pagination justify-content-center">
-					<!-- 2. var begin end 용법 -->
-					<c:forEach var="num" begin="1" end="5">
+					<li class="page-item ${paging.first ? 'disabled' : '' }">
+						<a href="list.do?page=${paging.currentPage - 1 }" class="page-link"><</a>
+					</li>
+					
+					<!--
+						forEach : 반복할 때 사용하는 태그, 최상단에 taglib 있어서 사용 가능
+						2. var begin end 용법
+						
+						* Controller에서 Pagination을 paging으로 담아놓음
+					-->
+					<c:forEach var="num" begin="${paging.beginPage }" end="${paging.endPage }">
 						<!-- eq : EL연산자, A eq B : A가 B와 같다 -->
 						<li class="page-item ${param.page eq num ? 'active' : '' }">
 							<a href="list.do?page=${num }" class="page-link">${num }</a>
 						</li>
 					</c:forEach>
+					
+					<li class="page-item ${paging.last ? 'disabled' : '' }">
+						<a href="list.do?page=${paging.currentPage + 1 }" class="page-link">></a>
+					</li>
 				</ul>
 			</nav>
 		</div>
 	</div>
+	
+	<!-- 
+		LOGIN_USER라는 속성명으로 조회했을 때 조회되는 정보가 있으면 컨텐츠가 표시되게 한다.
+	 -->
+	<c:if test="${not empty LOGIN_USER }">
+		<div class="row mb-3">
+			<div class="col-12">
+				<div class="text-end">
+					<a href="insert.do" class="btn btn-primary">새 게시글</a>
+				</div>
+			</div>
+		</div>
+	</c:if>
 </div>
 </body>
 </html>

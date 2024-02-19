@@ -1,6 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<div>인증이 완료된 사용자 정보 : ${LOGIN_USER }</div>
 <nav class="navbar navbar-expand-sm bg-light">
 	<div class="container">
 		<ul class="navbar-nav me-auto">
@@ -8,7 +7,7 @@
 				<a class="nav-link ${menu eq '홈' ? 'active' : '' }" href="/home.do">홈</a>
 			</li>
 			<li class="nav-item">
-				<a class="nav-link ${menu eq '게시판' ? 'active' : '' }" href="/board/list.do">게시판</a>
+				<a class="nav-link ${menu eq '게시판' ? 'active' : '' }" href="/board/list.do?page=1">게시판</a>
 			</li>
 		</ul>
 		
